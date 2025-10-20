@@ -1,11 +1,12 @@
 # Guess the Country
 
 An interactive geography quiz that challenges you to identify countries
-from their flags and trivia clues. The game runs entirely in the
-terminal and is powered by a structured dataset of countries defined in
+from their flags and trivia clues. The project ships with both a
+terminal-based experience and a real-time web interface, each powered by
+the shared dataset defined in
 [`game/guess_the_country.py`](game/guess_the_country.py).
 
-## Getting Started
+## Play in the Terminal
 
 1. Ensure you have Python 3.9 or newer installed.
 2. Clone this repository and open a terminal in the project root.
@@ -25,6 +26,23 @@ terminal and is powered by a structured dataset of countries defined in
 Press `Ctrl+C`, type `quit`, or enter `exit` at any guess prompt to end
 the session. After each round the game reports whether you guessed the
 country correctly and keeps a running score.
+
+## Play in the Browser
+
+The web experience uses Flask to serve a single-page application with a
+live scoreboard and dynamic clues. Install the runtime dependency and
+launch the server with:
+
+```bash
+pip install flask
+python -m game.guess_the_country --web
+```
+
+By default the game will be available at
+http://127.0.0.1:5000/ — open the URL in your browser to play. Each
+guess is checked in real-time, the scoreboard updates immediately, and
+you can reveal additional hints with a single click. Stop the server
+with `Ctrl+C`.
 
 ## Extending the Dataset
 
