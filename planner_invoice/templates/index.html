@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Planner & Invoice Realtime</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div>
+          <h1>Manajemen Jadwal & Invoice</h1>
+          <p class="subtitle">
+            Dashboard realtime untuk merencanakan aktivitas, membuat invoice
+            profesional, dan menghasilkan QR Code instan.
+          </p>
+        </div>
+        <div class="actions">
+          <button id="download-pdf" class="primary">Unduh PDF</button>
+          <button id="download-raw" class="ghost">Unduh Data Mentah</button>
+        </div>
+      </header>
+      <main class="app-main">
+        <section class="panel form-panel">
+          <div class="card">
+            <h2>Tambah Agenda Jadwal</h2>
+            <form id="schedule-form" class="stack">
+              <div class="grid">
+                <label>
+                  Tanggal
+                  <input type="date" name="date" required />
+                </label>
+                <label>
+                  Waktu
+                  <input type="time" name="time" required />
+                </label>
+              </div>
+              <label>
+                Aktivitas
+                <input
+                  type="text"
+                  name="activity"
+                  placeholder="Contoh: Rapat proyek bersama klien"
+                  required
+                />
+              </label>
+              <label>
+                Lokasi / Platform
+                <input
+                  type="text"
+                  name="location"
+                  placeholder="Contoh: Zoom / Kantor Jakarta"
+                />
+              </label>
+              <label>
+                Catatan Tambahan
+                <textarea
+                  name="notes"
+                  placeholder="Agenda, kebutuhan khusus, atau detail penting lainnya"
+                  rows="2"
+                ></textarea>
+              </label>
+              <button type="submit" class="secondary">Simpan Agenda</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Jadwal Tersusun</h2>
+              <button id="clear-schedule" class="ghost small">
+                Bersihkan Jadwal
+              </button>
+            </div>
+            <table class="data-table" id="schedule-table">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Waktu</th>
+                  <th>Aktivitas</th>
+                  <th>Lokasi</th>
+                  <th>Catatan</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <h2>Detail Invoice</h2>
+            <form id="invoice-meta" class="grid meta">
+              <label>
+                Nomor Invoice
+                <input type="text" name="invoiceNumber" placeholder="INV-2024-001" />
+              </label>
+              <label>
+                Tanggal Terbit
+                <input type="date" name="issueDate" />
+              </label>
+              <label>
+                Tanggal Jatuh Tempo
+                <input type="date" name="dueDate" />
+              </label>
+              <label>
+                Nama Klien
+                <input type="text" name="clientName" placeholder="Nama perusahaan / individu" />
+              </label>
+              <label>
+                Email Klien
+                <input type="email" name="clientEmail" placeholder="client@email.com" />
+              </label>
+              <label class="wide">
+                Alamat / Catatan Klien
+                <textarea name="clientAddress" rows="2" placeholder="Alamat lengkap atau catatan tambahan"></textarea>
+              </label>
+              <label>
+                Pajak (%)
+                <input type="number" name="taxRate" min="0" step="0.01" value="11" />
+              </label>
+              <label>
+                Diskon (%)
+                <input type="number" name="discountRate" min="0" step="0.01" value="0" />
+              </label>
+            </form>
+          </div>
+
+          <div class="card">
+            <h2>Tambah Item Invoice</h2>
+            <form id="item-form" class="grid">
+              <label class="wide">
+                Deskripsi Pekerjaan / Item
+                <input type="text" name="description" placeholder="Desain UI halaman utama" required />
+              </label>
+              <label>
+                Kuantitas / Jam
+                <input type="number" name="quantity" min="0" step="0.25" value="1" required />
+              </label>
+              <label>
+                Tarif (Rp)
+                <input type="number" name="rate" min="0" step="1000" value="150000" required />
+              </label>
+              <button type="submit" class="secondary wide">Tambah ke Invoice</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Daftar Item</h2>
+              <button id="clear-items" class="ghost small">Bersihkan Item</button>
+            </div>
+            <table class="data-table" id="items-table">
+              <thead>
+                <tr>
+                  <th>Deskripsi</th>
+                  <th>Qty</th>
+                  <th>Tarif</th>
+                  <th>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3">Subtotal</td>
+                  <td id="subtotal">Rp0</td>
+                </tr>
+                <tr>
+                  <td colspan="3">Diskon</td>
+                  <td id="discount">Rp0</td>
+                </tr>
+                <tr>
+                  <td colspan="3">Pajak</td>
+                  <td id="tax">Rp0</td>
+                </tr>
+                <tr class="grand-total">
+                  <td colspan="3">Total Akhir</td>
+                  <td id="grand-total">Rp0</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel preview-panel">
+          <div class="card" id="preview-area">
+            <div class="preview-header">
+              <div>
+                <h2>Invoice Preview</h2>
+                <p id="preview-client"></p>
+              </div>
+              <div class="preview-meta">
+                <p id="preview-number">INV-XXXX</p>
+                <p><span>Terbit:</span> <span id="preview-issue">-</span></p>
+                <p><span>Jatuh Tempo:</span> <span id="preview-due">-</span></p>
+              </div>
+            </div>
+            <div>
+              <h3>Agenda Terjadwal</h3>
+              <ul id="schedule-preview" class="timeline"></ul>
+            </div>
+            <div>
+              <h3>Rincian Pekerjaan</h3>
+              <table class="data-table compact">
+                <thead>
+                  <tr>
+                    <th>Deskripsi</th>
+                    <th>Qty</th>
+                    <th>Tarif</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody id="preview-items"></tbody>
+              </table>
+            </div>
+            <div class="preview-totals">
+              <div><span>Subtotal:</span><strong id="preview-subtotal">Rp0</strong></div>
+              <div><span>Diskon:</span><strong id="preview-discount">Rp0</strong></div>
+              <div><span>Pajak:</span><strong id="preview-tax">Rp0</strong></div>
+              <div class="highlight"><span>Total:</span><strong id="preview-grand">Rp0</strong></div>
+            </div>
+            <div>
+              <h3>Pembayaran via QR</h3>
+              <p class="subtitle">
+                Pindai QR Code untuk melihat detail invoice ringkas.
+              </p>
+              <div id="qr-code" class="qr"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.11/dayjs.min.js" integrity="sha512-YwH0I6+w4n1vCtbmZh9rqx8p2mxBShGsyYpngq6pt43QR2OKpA05nL77kRhPwbOJ0VTKeIy6zZhbr5odd937kQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-h/AcCknlOCVykWPjMmfgI+IiLNR3oCBm21DHc1Vht0ZMwF3D+cwsQUf6DRgo6uIlpwFd+4wHTd5EdX2xL4x0xw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-UdCj4mJzN2rtIFexL54FgR+xy2dJA3sEBz9TMvjwBPlyZP1Vs/9YFftOyGybZi8M8V/tOrlsYWc5BhlwWTr2Zw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-8V7VJq1UwVKUkpCYrDdc0AGJi/7luWGINuD/7++UZ5EKeosFVJeFt9blw8k5+0F03DG6T4P1r6Uu7R7atwYv3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}" type="module"></script>
+  </body>
+</html>

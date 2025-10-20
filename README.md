@@ -39,6 +39,40 @@ keamanan dalam satu dashboard.
 Data vault disimpan secara lokal pada `data/calculator_vault.sqlite`
 dengan enkripsi simetris berbasis password master.
 
+## Realtime Planner & Invoice Studio
+
+Sebuah aplikasi web interaktif untuk merancang jadwal kegiatan,
+mengelola rincian invoice secara realtime, dan menghasilkan QR code serta
+dokumen PDF siap kirim.
+
+### Menjalankan aplikasi
+
+1. Pastikan Python 3.9 atau lebih baru tersedia.
+2. Instal dependensi yang dibutuhkan:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Jalankan server web dengan:
+
+   ```bash
+   python -m planner_invoice.app
+   ```
+
+4. Buka <http://127.0.0.1:5000/> di browser untuk mulai mengatur jadwal,
+   membuat invoice, mengunduh PDF, atau mengekspor data mentah.
+
+### Fitur utama
+
+- **Manajemen jadwal realtime** dengan timeline yang selalu sinkron
+  tanpa perlu me-refresh halaman.
+- **Penyusunan invoice dinamis** lengkap dengan perhitungan diskon,
+  pajak, dan total akhir.
+- **Ekspor fleksibel** ke dalam format PDF maupun berkas JSON mentah.
+- **QR code otomatis** yang merangkum detail invoice sehingga mudah
+  dibagikan dan dipindai di perangkat seluler.
+
 ## Guess the Country
 
 An interactive geography quiz that challenges you to identify countries
