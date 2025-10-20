@@ -1,4 +1,45 @@
-# Guess the Country
+# Projects
+
+## Nexus Calculator Vault
+
+Sebuah kalkulator ilmiah modern dengan antarmuka adaptif, histori
+perhitungan real-time, dan vault terenkripsi untuk menyimpan catatan
+pribadi. Aplikasi ini dirancang untuk menjadi utilitas produktivitas dan
+keamanan dalam satu dashboard.
+
+### Menjalankan aplikasi
+
+1. Pastikan Python 3.9 atau lebih baru tersedia.
+2. Instal dependensi yang dibutuhkan:
+
+   ```bash
+   pip install flask cryptography
+   ```
+
+3. Jalankan server web dengan:
+
+   ```bash
+   python -m calculator_vault.app
+   ```
+
+4. Buka <http://127.0.0.1:5000/> di browser untuk mulai menggunakan
+   kalkulator dan vault.
+
+### Fitur utama
+
+- **Kalkulator ilmiah adaptif** dengan dukungan fungsi trigonometri,
+  eksponensial, memori pintar, dan dukungan keyboard.
+- **Histori perhitungan real-time** yang dapat dikelola tanpa me-refresh
+  halaman.
+- **Vault terenkripsi** dengan password master, dukungan tambah/edit/
+  hapus catatan secara langsung, serta indikator status yang jelas.
+- **UI futuristik** dengan mode gelap, animasi halus, dan kompatibel di
+  desktop maupun perangkat bergerak.
+
+Data vault disimpan secara lokal pada `data/calculator_vault.sqlite`
+dengan enkripsi simetris berbasis password master.
+
+## Guess the Country
 
 An interactive geography quiz that challenges you to identify countries
 from their flags and trivia clues. The project ships with both a
@@ -6,7 +47,7 @@ terminal-based experience and a real-time web interface, each powered by
 the shared dataset defined in
 [`game/guess_the_country.py`](game/guess_the_country.py).
 
-## Play in the Terminal
+### Play in the Terminal
 
 1. Ensure you have Python 3.9 or newer installed.
 2. Clone this repository and open a terminal in the project root.
@@ -27,7 +68,7 @@ Press `Ctrl+C`, type `quit`, or enter `exit` at any guess prompt to end
 the session. After each round the game reports whether you guessed the
 country correctly and keeps a running score.
 
-## Play in the Browser
+### Play in the Browser
 
 The web experience uses Flask to serve a single-page application with a
 live scoreboard and dynamic clues. Install the runtime dependency and
@@ -39,12 +80,12 @@ python -m game.guess_the_country --web
 ```
 
 By default the game will be available at
-http://127.0.0.1:5000/ — open the URL in your browser to play. Each
+<http://127.0.0.1:5000/> — open the URL in your browser to play. Each
 guess is checked in real-time, the scoreboard updates immediately, and
 you can reveal additional hints with a single click. Stop the server
 with `Ctrl+C`.
 
-## Extending the Dataset
+### Extending the Dataset
 
 Country data lives in the `COUNTRY_DATA` list within
 [`game/guess_the_country.py`](game/guess_the_country.py). Each entry is a
